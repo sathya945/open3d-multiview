@@ -1,17 +1,19 @@
 import open3d as o3d
-import sys,os
-from view_pointcloud import *
+import sys
+from multiprocessing import Process
+from pointscript import *
 
 
 
 def pick_points(list_pcd_files):
+    proc = []
     for i in range(0,len(list_pcd_files)):
-        n = os.fork()
-        if n>0:
-            pass
-        else:
-            view_pointcloud(list_pcd_files[i])
-            sys.exit(0)
+        p = Process(target = view_pointcloud,args =(list_pcd_files[i],))
+        p.start()
+        proc.append(p)
+    for p in proc:
+        p.join()
+
 
 
 
